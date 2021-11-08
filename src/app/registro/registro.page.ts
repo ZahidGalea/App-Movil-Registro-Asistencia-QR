@@ -31,4 +31,7 @@ export class RegistroPage implements OnInit {
     await toast.present();
   }
 
+
+
+
 }
