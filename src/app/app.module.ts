@@ -4,16 +4,31 @@ import {RouteReuseStrategy} from '@angular/router';
 
 import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 
-import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {DatePipe} from '@angular/common';
+import {AppRoutingModule} from './app-routing.module';
+
+
+import {HttpClientModule} from '@angular/common/http';
+import {SQLitePorter} from '@ionic-native/sqlite-porter/ngx';
+import {SQLite} from '@ionic-native/sqlite/ngx';
+import {DatabaseService} from './servicios/database.service';
+
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}, DatePipe],
+  imports: [HttpClientModule,
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule
+  ],
+  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    SQLite,
+    SQLitePorter,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {
+  constructor(db: DatabaseService) {
+  }
 }

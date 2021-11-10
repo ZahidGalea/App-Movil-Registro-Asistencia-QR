@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastController} from '@ionic/angular';
-import {Router} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {RegistroAsistenciaService} from './registro-asistencia.service';
 
@@ -18,6 +18,7 @@ export class RegistroPage implements OnInit {
 
 
   constructor(private router: Router,
+              private activerouter: ActivatedRoute,
               private toastController: ToastController,
               private datepipe: DatePipe,
               private registroAsistenciaService: RegistroAsistenciaService) {
@@ -37,10 +38,14 @@ export class RegistroPage implements OnInit {
   };
 
   registroAsistencia() {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        registro: this.registro
+      }
+    };
     const qrInfo = this.getQrInformation();
     console.log(qrInfo);
     if (qrInfo === undefined) {
-      this.presentToast('QR Con problemas');
       this.presentToast('QR Con problemas');
       Error('Problemas con el QR');
     } else {
@@ -53,7 +58,7 @@ export class RegistroPage implements OnInit {
         currentTimeString, qrInfo.qrId, qrInfo.ramo, qrInfo.semestre);
       this.presentToast('Información resguardada correctamente.');
       console.log(this.registroAsistenciaService.getRegistrosAsistencias());
-      this.router.navigate(['/asistencia']);
+      this.router.navigate(['/asistencia'], navigationExtras);
     }
 
   };

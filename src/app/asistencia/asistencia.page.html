@@ -7,7 +7,7 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-button routerLink="/registro">Registrar asistencia de clases con QR</ion-button>
+  <ion-button [routerLink]="['/registro']">Registrar asistencia de clases con QR</ion-button>
 
   <ion-list *ngFor="let asistencia of listaAsistencias">
     <ion-item>
