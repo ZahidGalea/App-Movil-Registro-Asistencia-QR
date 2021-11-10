@@ -8,14 +8,16 @@
 </ion-header>
 
 <ion-content [class.ion-align-items-center]="true">
+
   <ion-item lines="full">
     <ion-label position="floating">Abrir Cámara</ion-label>
-    <ion-input type="text" required></ion-input>
+    <ion-input type="text" required [(ngModel)]="registro.qrId"></ion-input>
   </ion-item>
 
   <ion-row>
     <ion-col>
-      <ion-button type="submit" color="danger" expand="block">Registrar asistencia</ion-button>
+      <ion-button type="submit" color="danger" expand="block" (click)="registroAsistencia()">Registrar asistencia
+      </ion-button>
     </ion-col>
   </ion-row>
 </ion-content>

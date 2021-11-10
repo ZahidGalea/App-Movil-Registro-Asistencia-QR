@@ -1,4 +1,4 @@
-export interface AsistenciaModel{
+export interface RegistroAsistenciaModel{
   fecha: string;
   hora: string;
   semestre: string;

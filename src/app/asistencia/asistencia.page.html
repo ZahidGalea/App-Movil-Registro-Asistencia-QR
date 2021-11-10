@@ -4,15 +4,15 @@
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
 
-  <ion-button routerLink="/registro" routerDirection="forward">Registrar asistencia de clases con QR</ion-button>
+  <ion-button routerLink="/registro">Registrar asistencia de clases con QR</ion-button>
 
   <ion-list *ngFor="let asistencia of listaAsistencias">
     <ion-item>
       {{asistencia.carrera}} - {{asistencia.fecha}} - {{asistencia.hora}}
     </ion-item>
   </ion-list>
-
 
 </ion-content>

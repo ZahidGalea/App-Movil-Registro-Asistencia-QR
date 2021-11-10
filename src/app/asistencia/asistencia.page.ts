@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { AsistenciaService } from './asistencia.service';
+import {AsistenciaService} from './asistencia.service';
 
 @Component({
   selector: 'app-home',
