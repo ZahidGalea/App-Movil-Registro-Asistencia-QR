@@ -1,18 +1,54 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Registro de Asistencia</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Asistencias</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
-<ion-content [fullscreen]="true">
+<ion-content padding>
 
-  <ion-button [routerLink]="['/registro']">Registrar asistencia de clases con QR</ion-button>
+  <ion-segment [(ngModel)]="selectedView">
+    <ion-segment-button value="asistencias">
+      <ion-label>Historial</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="registro">
+      <ion-label>Registrar</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
-  <ion-list *ngFor="let asistencia of listaAsistencias">
-    <ion-item>
-      {{asistencia.carrera}} - {{asistencia.fecha}} - {{asistencia.hora}}
-    </ion-item>
-  </ion-list>
+  <div [ngSwitch]="selectedView">
+    <div *ngSwitchCase="'asistencias'">
+      <ion-list *ngFor="let asistencia of asistencias">
+        <ion-item>
+          {{asistencia.carrera}} - {{asistencia.ramo}} - {{asistencia.fecha}}:{{asistencia.hora}}
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div *ngSwitchCase="'registro'">
+      <ion-item lines="full">
+        <ion-label position="floating">Carrera</ion-label>
+        <ion-input type="text" required [(ngModel)]="registroAsistencia.carrera"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Ramo</ion-label>
+        <ion-input type="text" required [(ngModel)]="registroAsistencia.ramo"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Semestre</ion-label>
+        <ion-input type="text" required [(ngModel)]="registroAsistencia.semestre"></ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" color="danger" expand="block" (click)="addAsistencia()">Registrar asistencia
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+
+  </div>
 
 </ion-content>

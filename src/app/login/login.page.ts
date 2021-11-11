@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {UsuarioService} from './usuario.service';
 import {ToastController} from '@ionic/angular';
 import {Router, NavigationExtras} from '@angular/router';
-import {Usuario} from './usuario.model';
+import {DatabaseService, Usuario} from '../servicios/database.service';
+import {UtilitiesService} from '../servicios/utilities.service';
+
 
 @Component({
   selector: 'app-login',
@@ -14,15 +15,14 @@ export class LoginPage implements OnInit {
     usuario: '',
     password: ''
   };
-  usuarioServiceS: Usuario;
-  campo: string;
 
-  constructor(private usuarioService: UsuarioService,
+  constructor(private db: DatabaseService,
               private toastController: ToastController,
-              private router: Router) { }
+              private router: Router,
+              private utilities: UtilitiesService) {
+  }
 
   ngOnInit() {
-    this.presentToast('Porfavor, logueate para continuar', 6000);
   }
 
   async presentToast(message: string, duration?: number) {
@@ -41,28 +41,22 @@ export class LoginPage implements OnInit {
         user: this.user
       }
     };
-    if (this.validateModel(this.user)) {
-      this.usuarioServiceS = this.usuarioService.getUsuario(this.user.usuario);
-      if (this.usuarioService.getUsuario(this.user.usuario).password === this.user.password) {
-        this.router.navigate(['/asistencia'],  navigationExtras);
-      } else {
-        this.presentToast('Usuario o password no validos');
-      }
+    if (this.utilities.validateModel(this.user)) {
+      this.db.getUsuario(this.user.usuario).then(data => {
+          if (data.password === this.user.password) {
+            this.router.navigate(['/asistencia'], navigationExtras);
+          } else {
+            this.presentToast('Password no valido');
+          }
+        }
+      ).catch(reason => this.presentToast('Usuario no encontrado'));
     } else {
-      this.presentToast('Falta completar: ' + this.campo);
+      this.presentToast('Falta completar campos ');
     }
+    ;
 
   }
 
-  validateModel(model: any) {
-    for (const [key, value] of Object.entries(model)) {
-      if (value === '') {
-        this.campo = key;
-        return false;
-      }
-    }
-    return true;
-  }
 
 }
 

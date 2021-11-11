@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {UsuarioService} from '../login/usuario.service';
 import {ToastController} from '@ionic/angular';
-import {NavigationExtras, Router} from '@angular/router';
-import {Usuario} from '../login/usuario.model';
+import {DatabaseService, Usuario} from '../servicios/database.service';
 import {AppComponent} from '../app.component';
+import {UtilitiesService} from '../servicios/utilities.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-password-reset',
@@ -15,12 +15,12 @@ export class PasswordResetPage implements OnInit {
   user = {
     usuario: ''
   };
-  usuarioServiceS: Usuario;
+  usuario: Usuario;
   campo: string;
 
-  constructor(private usuarioService: UsuarioService,
+  constructor(private db: DatabaseService,
               private toastController: ToastController,
-              private router: Router, private appComponent: AppComponent) {
+              private router: Router, private appComponent: AppComponent, private utilities: UtilitiesService) {
   }
 
   ngOnInit() {
@@ -38,30 +38,19 @@ export class PasswordResetPage implements OnInit {
   }
 
   ingresar() {
-    if (this.validateModel(this.user)) {
-      this.usuarioServiceS = this.usuarioService.getUsuario(this.user.usuario);
-      if (this.appComponent.isEmptyObject(this.usuarioService.getUsuario(this.user.usuario)) === false) {
-        console.log(this.usuarioService.getUsuario(this.user.usuario));
+    if (this.utilities.validateModel(this.user)) {
+      if (this.utilities.isEmptyObject(this.db.getUsuario(this.user.usuario)) === false) {
+        console.log(this.db.getUsuario(this.user.usuario));
         this.presentToast('Correo enviado.', 10000);
         this.router.navigate(['/login']);
       } else {
         this.presentToast('Usuario no encontrado');
       }
     } else {
-      this.presentToast('Falta completar: ' + this.campo);
+      this.presentToast('Falta completar el campo');
     }
 
   }
 
-
-  validateModel(model: any) {
-    for (const [key, value] of Object.entries(model)) {
-      if (value === '') {
-        this.campo = key;
-        return false;
-      }
-    }
-    return true;
-  }
 
 }
