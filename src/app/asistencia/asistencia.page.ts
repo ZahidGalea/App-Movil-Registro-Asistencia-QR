@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Asistencia, DatabaseService} from '../servicios/database.service';
+import {Asistencia, DatabaseService} from '../services/database.service';
 import {ToastController} from '@ionic/angular';
 import {DatePipe} from '@angular/common';
+import {UtilitiesService} from '../services/utilities.service';
 
 
 @Component({
@@ -18,12 +19,12 @@ export class AsistenciaPage implements OnInit {
   };
   selectedView: 'registro';
 
-  constructor(private db: DatabaseService, private datepipe: DatePipe, private toastController: ToastController) {
-
+  constructor(private db: DatabaseService, private datepipe: DatePipe,
+              private toastController: ToastController, private utilities: UtilitiesService) {
   }
 
+
   ngOnInit() {
-    this.presentToast('Cargando asistencias', 1000);
     this.db.getDatabaseState().subscribe(ready => {
       if (ready) {
         console.log(ready);
@@ -53,9 +54,15 @@ export class AsistenciaPage implements OnInit {
     const currentDateString = this.datepipe.transform(date, 'yyyy-MM-dd');
     const currentTimeString = this.datepipe.transform(date, 'shortTime');
 
-    this.db.addAsistencia(this.registroAsistencia.carrera, currentDateString,
-      currentTimeString, qrId, this.registroAsistencia.ramo, this.registroAsistencia.semestre);
-    this.presentToast('Información resguardada correctamente.');
+    if (this.utilities.validateModel(this.registroAsistencia)) {
+      this.db.addAsistencia(this.registroAsistencia.carrera, currentDateString,
+        currentTimeString, qrId, this.registroAsistencia.ramo, this.registroAsistencia.semestre);
+      this.presentToast('Información resguardada correctamente.');
+
+    } else {
+      this.presentToast('Falta completar campos ');
+    }
+
 
   };
 

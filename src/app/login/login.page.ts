@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastController} from '@ionic/angular';
 import {Router, NavigationExtras} from '@angular/router';
-import {DatabaseService, Usuario} from '../servicios/database.service';
-import {UtilitiesService} from '../servicios/utilities.service';
+import {DatabaseService} from '../services/database.service';
+import {UtilitiesService} from '../services/utilities.service';
+import {RestService} from '../services/rest.service';
 
 
 @Component({
@@ -16,13 +17,29 @@ export class LoginPage implements OnInit {
     password: ''
   };
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  datosNumbersApi: Object = {
+    text: '',
+    year: ''
+  };
+
+  public today: number = Date.now();
+
   constructor(private db: DatabaseService,
               private toastController: ToastController,
               private router: Router,
-              private utilities: UtilitiesService) {
+              private utilities: UtilitiesService,
+              private restService: RestService) {
+
   }
 
   ngOnInit() {
+    this.restService.getDatosNumbersApi(2, 2).subscribe(res => {
+        console.log(res);
+        this.datosNumbersApi = res;
+      },
+      error => console.log(error));
+
   }
 
   async presentToast(message: string, duration?: number) {

@@ -1,11 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title><img alt="logo" height="40" src="assets/Logo_DuocUC.svg" padding>   DuocUC - Portal de asistencia
-    </ion-title>
+    <ion-row class="ion-align-items-center">
+      <img alt="logo" height="40" src="assets/Logo_DuocUC.svg" padding>
+    </ion-row>
   </ion-toolbar>
 </ion-header>
-
-<ion-content fullscreen="true">
+<ion-header></ion-header>
+<ion-content fullscreen="true" [ngClass]="'blogcontainer'">
   <ion-item lines="full">
     <ion-label position="floating">Nombre de Usuario</ion-label>
     <ion-input [(ngModel)]="user.usuario" type="text"></ion-input>
@@ -30,4 +31,17 @@
     </ion-col>
 
   </ion-row>
+
+  <ion-card align-content="center">
+    <ion-row>
+      <ion-title class="ion-text-center">{{ today | date: 'medium' }}</ion-title>
+    </ion-row>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">{{datosNumbersApi.text}} - Year: {{datosNumbersApi.year}}</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
 </ion-content>

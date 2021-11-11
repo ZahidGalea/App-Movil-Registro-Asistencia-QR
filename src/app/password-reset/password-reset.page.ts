@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastController} from '@ionic/angular';
-import {DatabaseService, Usuario} from '../servicios/database.service';
+import {DatabaseService, Usuario} from '../services/database.service';
 import {AppComponent} from '../app.component';
-import {UtilitiesService} from '../servicios/utilities.service';
+import {UtilitiesService} from '../services/utilities.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -39,13 +39,11 @@ export class PasswordResetPage implements OnInit {
 
   ingresar() {
     if (this.utilities.validateModel(this.user)) {
-      if (this.utilities.isEmptyObject(this.db.getUsuario(this.user.usuario)) === false) {
-        console.log(this.db.getUsuario(this.user.usuario));
-        this.presentToast('Correo enviado.', 10000);
-        this.router.navigate(['/login']);
-      } else {
-        this.presentToast('Usuario no encontrado');
-      }
+      this.db.getUsuario(this.user.usuario).then(data => {
+          this.presentToast('Correo enviado');
+          this.router.navigate(['/login']);
+        }
+      ).catch(reason => this.presentToast('Usuario no encontrado'));
     } else {
       this.presentToast('Falta completar el campo');
     }
