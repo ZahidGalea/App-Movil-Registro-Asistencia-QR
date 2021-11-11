@@ -124,8 +124,8 @@ export class DatabaseService {
   }
 
   addAsistencia(carrera: string, fecha: string, hora: string, qrId: string, ramo: string, semestre: string) {
-    this.database.executeSql('INSERT INTO ASISTENCIA (carrera,qrId,semestre,fecha,hora,usuario) ' +
-      'VALUES (?,?,?,?,?,?)', [carrera, qrId, semestre, fecha, hora, 'zahid'])
+    this.database.executeSql('INSERT INTO ASISTENCIA (carrera,qrId,semestre,fecha,hora,usuario, ramo) ' +
+      'VALUES (?,?,?,?,?,?)', [carrera, qrId, semestre, fecha, hora, 'zahid', ramo])
       .then(data => {
         this.loadAsistencias();
       });
