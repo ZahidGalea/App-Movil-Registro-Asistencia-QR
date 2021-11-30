@@ -6,14 +6,16 @@ import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-
+import {NativeGeocoder} from '@ionic-native/native-geocoder/ngx';
 
 import {HttpClientModule} from '@angular/common/http';
 import {SQLitePorter} from '@ionic-native/sqlite-porter/ngx';
 import {SQLite} from '@ionic-native/sqlite/ngx';
 import {DatePipe} from '@angular/common';
-import {GoogleMap} from '@ionic-native/google-maps';
-import {Camera} from '@ionic-native/camera/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {QRScanner} from '@ionic-native/qr-scanner/ngx';
+import {GoogleMaps} from '@ionic-native/google-maps/ngx';
+import {Geocoder} from '@ionic-native/google-maps';
 
 
 @NgModule({
@@ -28,8 +30,11 @@ import {Camera} from '@ionic-native/camera/ngx';
     SQLite,
     SQLitePorter,
     DatePipe,
-    Camera,
-    GoogleMap
+    Geolocation,
+    GoogleMaps,
+    NativeGeocoder,
+    Geocoder,
+    QRScanner
   ],
   bootstrap: [AppComponent],
 })

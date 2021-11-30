@@ -3,6 +3,10 @@ import {Asistencia, DatabaseService} from '../services/database.service';
 import {ToastController} from '@ionic/angular';
 import {DatePipe} from '@angular/common';
 import {UtilitiesService} from '../services/utilities.service';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {NgZone} from '@angular/core';
+
+declare let google;
 
 
 @Component({
@@ -17,23 +21,33 @@ export class AsistenciaPage implements OnInit {
     ramo: '',
     semestre: ''
   };
-  selectedView: 'registro';
+  selectedView: '';
+
+  lat: any;
+  long: any;
+  address: any;
 
   constructor(private db: DatabaseService, private datepipe: DatePipe,
-              private toastController: ToastController, private utilities: UtilitiesService) {
+              private toastController: ToastController, private utilities: UtilitiesService,
+              private geolocation: Geolocation,
+              public zone: NgZone) {
   }
 
 
-  ngOnInit() {
+  async ngOnInit() {
     this.db.getDatabaseState().subscribe(ready => {
       if (ready) {
-        console.log(ready);
         this.db.getAsistencias().subscribe(asistencias => {
           console.log(asistencias);
           this.asistencias = asistencias;
         });
       }
 
+    });
+
+    this.geolocation.getCurrentPosition().then((data) => {
+      this.lat = data.coords.latitude;
+      this.long = data.coords.longitude;
     });
   }
 
@@ -48,16 +62,17 @@ export class AsistenciaPage implements OnInit {
     await toast.present();
   };
 
-  addAsistencia() {
+  async addAsistencia() {
     const qrId = this.generateQr();
     const date = new Date();
     const currentDateString = this.datepipe.transform(date, 'yyyy-MM-dd');
     const currentTimeString = this.datepipe.transform(date, 'shortTime');
 
+
     if (this.utilities.validateModel(this.registroAsistencia)) {
       this.db.addAsistencia(this.registroAsistencia.carrera, currentDateString,
         currentTimeString, qrId, this.registroAsistencia.ramo, this.registroAsistencia.semestre);
-      this.presentToast('Información resguardada correctamente.');
+      this.geoInformation();
 
     } else {
       this.presentToast('Falta completar campos ');
@@ -75,6 +90,27 @@ export class AsistenciaPage implements OnInit {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  geoInformation() {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = {
+      lat: this.lat,
+      lng: this.long
+    };
+
+    geocoder.geocode({location: latlng}, (results, status) => {
+        if (status === 'OK') {
+          if (results[0]) {
+            this.address = results[0].formatted_address;
+            this.presentToast('Registrado desde: ' + this.address, 8000);
+          } else {
+            console.log('No results found');
+          }
+        }
+      }
+    );
+
   }
 
 
