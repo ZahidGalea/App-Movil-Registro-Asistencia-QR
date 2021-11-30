@@ -39,6 +39,7 @@ export class DatabaseService {
 
   constructor(private http: HttpClient, private platform: Platform, private sqlite: SQLite, private sqlPorter: SQLitePorter) {
     this.platform.ready().then(() => {
+      console.log('Creating the database');
       this.sqlite.create({
         name: 'registraApp.db',
         location: 'default',
