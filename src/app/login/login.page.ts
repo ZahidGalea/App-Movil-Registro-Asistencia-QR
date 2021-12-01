@@ -25,7 +25,8 @@ export class LoginPage implements OnInit {
 
   public today: number = Date.now();
 
-  constructor(private db: DatabaseService,
+  constructor(
+              private db: DatabaseService,
               private toastController: ToastController,
               private router: Router,
               private utilities: UtilitiesService,

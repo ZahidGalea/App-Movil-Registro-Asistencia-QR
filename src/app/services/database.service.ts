@@ -1,4 +1,4 @@
-import {Platform} from '@ionic/angular';
+import {Platform, ToastController} from '@ionic/angular';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SQLite, SQLiteObject} from '@ionic-native/sqlite/ngx';
@@ -37,7 +37,7 @@ export class DatabaseService {
   private dbReady = new BehaviorSubject<boolean>(false);
 
 
-  constructor(private http: HttpClient, private platform: Platform, private sqlite: SQLite, private sqlPorter: SQLitePorter) {
+  constructor(private http: HttpClient, private platform: Platform, private sqlite: SQLite, private sqlPorter: SQLitePorter, private toastController: ToastController) {
     this.platform.ready().then(() => {
       console.log('Creating the database');
       this.sqlite.create({
@@ -53,6 +53,16 @@ export class DatabaseService {
     });
 
 
+  }
+
+  async presentToast(message: string, duration?: number) {
+    const toast = await this.toastController.create(
+      {
+        message,
+        duration: duration ? duration : 2000
+      }
+    );
+    await toast.present();
   }
 
   seedDatabase() {

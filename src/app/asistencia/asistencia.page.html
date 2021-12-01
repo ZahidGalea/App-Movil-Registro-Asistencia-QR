@@ -17,7 +17,7 @@
   </ion-segment>
 
   <div [ngSwitch]="selectedView">
-    <div *ngSwitchCase="'asistencias'">
+    <div *ngSwitchCase="'asistencias'" class="ion-padding">
       <ion-list *ngFor="let asistencia of asistencias">
         <ion-item>
           {{asistencia.carrera}} - {{asistencia.ramo}} - {{asistencia.fecha}}:{{asistencia.hora}}
@@ -25,29 +25,34 @@
       </ion-list>
     </div>
 
-    <div *ngSwitchCase="'registro'">
-      <ion-item lines="full">
-        <ion-label position="floating">Carrera</ion-label>
-        <ion-input type="text" required [(ngModel)]="registroAsistencia.carrera"></ion-input>
-      </ion-item>
+    <div *ngSwitchCase="'registro'" class="ion-padding">
 
-      <ion-item lines="full">
-        <ion-label position="floating">Ramo</ion-label>
-        <ion-input type="text" required [(ngModel)]="registroAsistencia.ramo"></ion-input>
-      </ion-item>
+      <ion-card *ngIf="address">
+        <ion-card-content>
+          <ion-row>
+            <ion-text>Posicion desde donde te registraste:</ion-text>
+          </ion-row>
+          <ion-row>
+            <ion-text>Latitud: {{lat}} - Longitud: {{long}}</ion-text>
+          </ion-row>
+          <ion-row>
+            <ion-text>Direccion: {{address}}</ion-text>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
 
-      <ion-item lines="full">
-        <ion-label position="floating">Semestre</ion-label>
-        <ion-input type="text" required [(ngModel)]="registroAsistencia.semestre"></ion-input>
-      </ion-item>
+      <ion-button expand="full" (click)="scanCode()" color="secondary">
+        <ion-text> Escanear codigo QR</ion-text>
+        <ion-icon name="qr-code-outline"></ion-icon>
+      </ion-button>
 
-      <ion-row>
-        <ion-col>
-          <ion-button type="submit" color="danger" expand="block" (click)="addAsistencia()">Registrar asistencia
-          </ion-button>
-        </ion-col>
-      </ion-row>
+      <ion-card *ngIf="scannedQr">
+        <ion-card-content>
+          Resultado del Escaner: {{scannedQr.text}}
+        </ion-card-content>
+      </ion-card>
     </div>
+
 
   </div>
 

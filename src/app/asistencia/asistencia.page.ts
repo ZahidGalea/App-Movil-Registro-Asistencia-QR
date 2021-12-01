@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Asistencia, DatabaseService} from '../services/database.service';
-import {ToastController} from '@ionic/angular';
+import {Platform, ToastController} from '@ionic/angular';
 import {DatePipe} from '@angular/common';
 import {UtilitiesService} from '../services/utilities.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {NgZone} from '@angular/core';
+import {BarcodeScanner, BarcodeScanResult} from '@ionic-native/barcode-scanner/ngx';
+import {QrScannerService} from "../services/qr-scanner.service";
 
 declare let google;
 
@@ -17,9 +18,9 @@ declare let google;
 export class AsistenciaPage implements OnInit {
   asistencias: Asistencia[] = [];
   registroAsistencia = {
-    carrera: '',
-    ramo: '',
-    semestre: ''
+    carrera: 'Ing. Informatica',
+    ramo: 'Progra movil',
+    semestre: '4'
   };
   selectedView: '';
 
@@ -27,12 +28,18 @@ export class AsistenciaPage implements OnInit {
   long: any;
   address: any;
 
-  constructor(private db: DatabaseService, private datepipe: DatePipe,
-              private toastController: ToastController, private utilities: UtilitiesService,
-              private geolocation: Geolocation,
-              public zone: NgZone) {
-  }
+  scanSub: any;
+  scannedQr: BarcodeScanResult;
 
+  constructor(private db: DatabaseService,
+              private datepipe: DatePipe,
+              private toastController: ToastController,
+              private utilities: UtilitiesService,
+              private geolocation: Geolocation,
+              private platform: Platform,
+              private barcodeScanner: BarcodeScanner,
+              private qrScannerService: QrScannerService) {
+  }
 
   async ngOnInit() {
     this.db.getDatabaseState().subscribe(ready => {
@@ -50,7 +57,6 @@ export class AsistenciaPage implements OnInit {
       this.long = data.coords.longitude;
     });
   }
-
 
   async presentToast(message: string, duration?: number) {
     const toast = await this.toastController.create(
@@ -103,7 +109,6 @@ export class AsistenciaPage implements OnInit {
         if (status === 'OK') {
           if (results[0]) {
             this.address = results[0].formatted_address;
-            this.presentToast('Registrado desde: ' + this.address, 8000);
           } else {
             console.log('No results found');
           }
@@ -113,5 +118,16 @@ export class AsistenciaPage implements OnInit {
 
   }
 
+  scanCode() {
+    // Escanera el codigo y en base al texto guarda la asistencia
+    //this.qrScannerService.scanQr();
+    this.barcodeScanner.scan().then(barcodeData => {
+      this.scannedQr = barcodeData;
+      console.log(this.scannedQr);
+    });
+
+    this.addAsistencia();
+
+  }
 
 }

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>evaluacion-2-zahid-galea</name>
+    <name>Registra APP</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
@@ -17,7 +17,7 @@
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="assets/Logo_DuocUC.svg" />
-    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="SplashScreenDelay" value="5000" />
     <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="AIzaSyAL8b92ab1lGMXSS7hewAHMOHmld0MmDwg" />
     <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyAL8b92ab1lGMXSS7hewAHMOHmld0MmDwg" />
     <platform name="android">
